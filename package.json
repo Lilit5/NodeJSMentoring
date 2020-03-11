@@ -1,0 +1,33 @@
+{
+  "name": "NodeJSMentoring",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "babel": "babel",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node bin/dev",
+    "build": "npm run babel src -s -d dist",
+    "dev": "nodemon --exec npm run babel -- ./src/index.js",
+    "lint": "eslint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Lilit5/NodeJSMentoring.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Lilit5/NodeJSMentoring/issues"
+  },
+  "homepage": "https://github.com/Lilit5/NodeJSMentoring#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.8.7",
+    "@babel/polyfill": "^7.8.7",
+    "@babel/preset-env": "^7.8.7",
+    "install": "^0.13.0",
+    "npm": "^6.14.2"
+  }
+}
