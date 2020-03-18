@@ -1,12 +1,10 @@
 const Joi = require('@hapi/joi');
 const express = require('express');
 const schema = require('./schemas/users.post.schema');
-const { user } = require('./common/constants');
-const getAutoSuggestUsers = require('./common/utils'); 
+const getAutoSuggestUsers = require('./common/utils');
 const app = express();
 const users = [];
 
-console.log("HI !!!!!!!!!");
 app.use(express.json());
 
 app.get('/', (req, res) => {
@@ -15,10 +13,8 @@ app.get('/', (req, res) => {
 
 app.post('/users', (req, res, next) => {
     const validateionResp = Joi.validate(req.body, schema);
-    console.log("validateionResp.error ", validateionResp.error);
     if (validateionResp.error) {
         res.status(400).send(validateionResp.error.details);
-        // res.end();
     } else if (users.find(user => user.login === req.body.login)) {
         res.status(400).send({ message: `User with username "${req.body.login}" already exists` });
     } else {
@@ -30,8 +26,7 @@ app.post('/users', (req, res, next) => {
             isDeleted: false
         };
         users.push(user);
-        res.send(users[users.length -1]);
-        console.log("modified Users = ", users);
+        res.send(users[users.length - 1]);
     }
 });
 
@@ -61,10 +56,16 @@ app.get('/users/:id', (req, res) => {
 });
 
 app.get('/users', (req, res) => {
-    const autoSuggestUsers = getAutoSuggestUsers("uuu", users);
-    console.log("autoSuggestUsers", autoSuggestUsers);
-    // if (autoSuggestUsers)
-    res.send(users);
+    if (req.query.loginContains) {
+        const autoSuggestUsers = getAutoSuggestUsers(req.query.loginContains, users);
+        if (autoSuggestUsers.message) {
+            res.status(400).send(autoSuggestUsers);
+        } else {
+            res.send(autoSuggestUsers);
+        }
+    } else {
+        res.send(users);
+    }
 });
 
 app.delete('/users/:id', (req, res) => {
