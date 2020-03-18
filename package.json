@@ -4,11 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "babel": "babel",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node bin/dev",
-    "build": "npm run babel src -s -d dist",
-    "dev": "nodemon --exec npm run babel -- ./src/index.js",
+    "clear": "rm -rf dist",
+    "build": "npm run clear && mkdir dist && babel src -s -d dist",
+    "dev": "nodemon --exec babel-node ./src/index.js",
     "lint": "eslint"
   },
   "repository": {
@@ -27,6 +27,7 @@
     "@babel/core": "^7.8.7",
     "@babel/polyfill": "^7.8.7",
     "@babel/preset-env": "^7.8.7",
+    "@babel/node": "^7.8.7",
     "eslint": "^6.8.0",
     "@hapi/joi": "^14.3.1",
     "express": "^4.17.1",
