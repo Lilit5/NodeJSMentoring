@@ -1,33 +1,35 @@
 const Joi = require('@hapi/joi');
 const express = require('express');
 const schema = require('./schemas/users.post.schema');
-const getAutoSuggestUsers = require('./common/utils');
+import getAutoSuggestUsers from './common/utils';
+
 const app = express();
 const users = [];
 
 app.use(express.json());
 
 app.get('/', (req, res) => {
-    res.send("!!! Hello world !!!");
+	res.send("!!! Hello world !!!");
 });
 
 app.post('/users', (req, res, next) => {
-    const validateionResp = Joi.validate(req.body, schema);
-    if (validateionResp.error) {
-        res.status(400).send(validateionResp.error.details);
-    } else if (users.find(user => user.login === req.body.login)) {
-        res.status(400).send({ message: `User with username "${req.body.login}" already exists` });
-    } else {
-        const user = {
-            id: users.length + 1,
-            login: req.body.login,
-            password: req.body.password,
-            age: req.body.age,
-            isDeleted: false
-        };
-        users.push(user);
-        res.send(users[users.length - 1]);
-    }
+	const validateionResp = Joi.validate(req.body, schema);
+	const error = validateionResp.error ? validateionResp.error.details :
+		users.find(user => user.login === req.body.login) ?
+			{message: `User with username "${req.body.login}" already exists`} : null;
+	if (error) {
+		res.status(400).send(error);
+		return;
+	}
+	const user = {
+		id: users.length + 1,
+		login: req.body.login,
+		password: req.body.password,
+		age: req.body.age,
+		isDeleted: false
+	}
+	users.push(user);
+	res.send(users[users.length - 1]);
 });
 
 app.put('/users/:id', (req, res) => {
@@ -56,12 +58,12 @@ app.get('/users/:id', (req, res) => {
 });
 
 app.get('/users', (req, res) => {
-    if (req.query.loginContains) {
-        const autoSuggestUsers = getAutoSuggestUsers(req.query.loginContains, users);
-        if (autoSuggestUsers.message) {
-            res.status(400).send(autoSuggestUsers);
-        } else {
-            res.send(autoSuggestUsers);
+	if (req.query.loginContains) {
+		try {
+			const autoSuggestUsers = getAutoSuggestUsers(req.query.loginContains, users);
+			res.send(autoSuggestUsers);
+		} catch (exception) {
+            res.status(400).send(exception);
         }
     } else {
         res.send(users);
