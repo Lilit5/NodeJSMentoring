@@ -1,6 +1,7 @@
 const readline = require('readline');
 const fs = require('fs');
-const csvtojson = require("csvtojson");
+const byline = require('byline');
+const csvjson = require('csvjson');
 
 // Task 1.1
 const rl = readline.createInterface({
@@ -20,11 +21,20 @@ rl.on('line', (line) => {
 const csvPath = 'src/data/nodejs-hw1-ex1.csv';
 const jsonPath = 'src/data/nodejs-hw1-ex2.txt';
 
-try {
-  const readable = fs.createReadStream(csvPath);
-  const writable = fs.createWriteStream(jsonPath);
-  const csvJson = csvtojson();
-  readable.pipe(csvJson).pipe(writable);
-} catch (er) {
+const stream = byline(fs.createReadStream(csvPath));
+const writable = fs.createWriteStream(jsonPath);
+let lineCounter = 0;
+let firstLine;
+stream.on('data', line => {
+  if (lineCounter == 0) {
+    firstLine = line.toString()
+  } else {
+    const jsonLine = csvjson.toObject(firstLine + "\n" + line.toString(), { delimiter: ',' });
+    writable.write(JSON.stringify(...jsonLine) + "\n");
+  }
+  lineCounter++;
+});
+
+stream.on('error', err => {
   throw new Error(`While reading file: ${csvPath} occurred an error: ${er}`);
-}
+})
