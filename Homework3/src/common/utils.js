@@ -22,7 +22,7 @@ class Utils {
 			login: { type: DataTypes.STRING },
 			password: { type: DataTypes.STRING },
 			age: { type: DataTypes.INTEGER },
-			isDeleted: { type: DataTypes.BOOLEAN, defaultvalue: false },
+			isdeleted: { type: DataTypes.BOOLEAN },
 		},
 		{
 			timestamps: false
@@ -48,7 +48,7 @@ class Utils {
 
 	async objectCreateQuery(body) {
 		this.sequelize.authenticate().then(() => console.log("Authorized successful"));
-		return this.Users.create(body, { fields: ['id', 'login', 'password', 'age'] });
+		return this.Users.create(body, { fields: ['id', 'login', 'password', 'age', 'isdeleted'] });
 		// this.sequelize.close();
 	}
 

@@ -3,6 +3,7 @@ const express = require('express');
 const schema = require('./schemas/users.post.schema');
 import { utils } from './common/utils';
 import { GET_FROM_TABLE, CREATE_USERS_TABLE } from "./common/constants";
+import { raw } from 'express';
 
 const tableName = "users";
 // const Pg = require("pg").Client;
@@ -15,7 +16,7 @@ const tableName = "users";
 //     console.log("resp: ", json);
 //     console.log("err: ", err);
 // });
-(async function() {
+(async function () {
     const table1 = await utils.sendQuery(GET_FROM_TABLE(tableName));
     console.log("table1 ", table1);
 }());
@@ -94,13 +95,24 @@ app.get('/users', async (req, res) => {
     }
 });
 
-app.delete('/users/:id', (req, res) => {
+app.delete('/users/:id', async (req, res) => {
+    // const table = await utils.Users.findAll({where: isdeleted: false}, raw: true);
+    const users = await utils.Users.findAll({ raw: true });
+    // console.log("findAll table ", table);
     if (req.params.id > users.length || req.params.id < 1) {
         res.status(400).send({ message: `User with id ${req.params.id} doesn't exist` });
     } else {
-        users[req.params.id - 1].isDeleted = true;
-        res.send(users[req.params.id - 1]);
+        try {
+            const result = await utils.Users.update({ isdeleted: true }, { where: { id: req.params.id }, returning: true, raw: true });
+            console.log("deleted -- ", result[1]);
+            res.send(result[1]);
+        } catch (err) {
+            res.status(400).send({ message: `Error occured while deleting user with id: ${req.params.id}`, error: err });
+        }
     }
 })
+
+//Task 3.2 ..........................
+console.log("task 3.2 .............----------------.............");
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Listening on port ${port} ...`))
