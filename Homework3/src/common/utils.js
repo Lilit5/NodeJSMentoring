@@ -1,7 +1,7 @@
 const Pg = require("pg").Client;
 const connection = "postgres://postgres:post123@localhost/apicrud";
 const { Sequelize, DataTypes } = require('sequelize');
-import { GET_FROM_TABLE, CREATE_USERS_TABLE, TABLE_NAME } from "./constants"
+import { GET_FROM_TABLE, TABLE_NAME } from "./constants"
 
 class Utils {
 
@@ -31,26 +31,17 @@ class Utils {
 	}
 
 	sendQuery(query) {
-		// let json;
 		return this.pg.query(query)
 			.then((result) => {
 				console.log(query);
-				// console.log("typeoooooooooooof ",typeof result.rows);
-				//  return JSON.stringify(result.rows);
 				return result.rows;
-				// console.log("resp1: ", json);
-				// json;
 			})
 			.catch(err => { throw new Error(`Failed runing psql querry: ${err}`) })
-		// .then(() => this.pg.end());
-		// console.log("resp: ", json);
-		// return json;
 	}
 
 	async objectCreateQuery(body) {
 		this.sequelize.authenticate().then(() => console.log("Authorized successful"));
 		return this.Users.create(body, { fields: ['id', 'login', 'password', 'age', 'isdeleted'] });
-		// this.sequelize.close();
 	}
 
 	async objectUpdateQuery(toUpdate, id) {

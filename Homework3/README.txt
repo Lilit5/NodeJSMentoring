@@ -2,7 +2,7 @@ Basic CRUD operations implementation
 
 To run:
     * clone this repository
-    * go to Homework1 directory (cd Homework1)
+    * go to Homework3 directory (cd Homework3)
     * npm install
     * npm run dev
 
