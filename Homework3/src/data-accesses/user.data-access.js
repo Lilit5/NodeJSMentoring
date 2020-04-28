@@ -1,7 +1,8 @@
 const Pg = require("pg").Client;
 const connection = "postgres://postgres:post123@localhost/apicrud";
-const { Sequelize, DataTypes } = require('sequelize');
-import { GET_FROM_TABLE, TABLE_NAME } from "../common/constants"
+const { Sequelize } = require('sequelize');
+import { TABLE_NAME } from "../common/constants";
+import { model } from "../models/user.model";
 
 class UsersData {
 	constructor() {
@@ -16,13 +17,7 @@ class UsersData {
 				idle: 10000
 			}
 		});
-		this.Users = this.sequelize.define(TABLE_NAME, {
-			id: { type: DataTypes.INTEGER, primaryKey: true },
-			login: { type: DataTypes.STRING },
-			password: { type: DataTypes.STRING },
-			age: { type: DataTypes.INTEGER },
-			isdeleted: { type: DataTypes.BOOLEAN },
-		},
+		this.Users = this.sequelize.define(TABLE_NAME, model.Users,
 		{
 			timestamps: false,
 			freezeTableName: true

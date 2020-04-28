@@ -1,18 +1,8 @@
 import { Router } from 'express';
 import userService from '../services/user.service';
 import { utils } from '../common/utils';
-import { GET_FROM_TABLE, TABLE_NAME, ERROR } from "../common/constants"
-import { usersData } from '../data-accesses/user.data-access';
 
 const router = Router();
-
-// router.get('/:id', async (request, response) => {
-// 	try {
-// 		userService.getUserById(request.params.id);
-// 	} catch (e) {
-// 		response.send(500).body({error: 'something went wrong'})
-// 	}
-// });
 
 router.post('/', async (req, res, next) => {
 	try {
@@ -53,16 +43,8 @@ router.get('/:id', async (req, res) => {
 		const user = await userService.getUserById(req.params.id);
 		res.send(user);
 	} catch (err) {
-		console.log("errror ", err);
 		res.status(err.status).send(err.message);
 	}
-	// const isIdInvalid = await userService.isUsersIdInvalid(req.params.id);
-	// if (isIdInvalid) {
-	//     res.status(isIdInvalid.status).send(isIdInvalid.message);
-	// } else {
-	//     const user = await userService.getUserById(req.params.id);
-	//     res.send(user);
-	// }
 });
 
 router.get('/', async (req, res) => {
@@ -75,7 +57,6 @@ router.get('/', async (req, res) => {
 			res.send(users);
 		}
 	} catch (exception) {
-		console.log("ererer ", exception);
 		res.status(400).send(exception);
 	}
 });

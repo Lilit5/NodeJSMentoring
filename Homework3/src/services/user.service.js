@@ -1,6 +1,5 @@
 import { usersData } from "../data-accesses/user.data-access";
 import { GET_FROM_TABLE, TABLE_NAME, ERROR } from "../common/constants"
-import { utils } from '../common/utils';
 const Joi = require('@hapi/joi');
 const schema = require('../schemas/users.post.schema');
 
@@ -28,10 +27,8 @@ class UserService {
 	async getAllUsers(obj = false) {
 		let users;
 		if (obj) {
-			console.log("objjjjjjjjj");
 			users = await usersData.Users.findAll({ raw: true });
 		} else {
-			console.log("NO objjjjjjjjj");
 			users = await usersData.sendQuery(GET_FROM_TABLE(TABLE_NAME));
 		}
 		return users;
@@ -47,7 +44,7 @@ class UserService {
 
 	async crateUser(user) {
 		try {
-			return await utils.objectCreateQuery(user);
+			return await usersData.objectCreateQuery(user);
 		} catch (er) {
 			throw ERROR(400, er);
 		}

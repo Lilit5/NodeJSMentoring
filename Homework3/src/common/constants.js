@@ -1,4 +1,4 @@
-export const TABLE_NAME = "users6";
+export const TABLE_NAME = "users10";
 
 export const CREATE_USERS_TABLE = tableName => `create table ${tableName}
 (id int, login text, password text, age int, isDeleted bool);`;
