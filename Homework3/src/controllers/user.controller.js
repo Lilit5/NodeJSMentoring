@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import userService from '../services/user.service';
+import { usersData } from "../data-accesses/user.data-access";
 import { utils } from '../common/utils';
 
 const router = Router();
@@ -18,13 +19,14 @@ router.post('/', async (req, res, next) => {
 		const response = await userService.crateUser(user);
 		res.send(response.dataValues);
 	} catch (err) {
+		console.log(err);
 		res.status(err.status).send(err.message);
 	}
 });
 
 router.put('/:id', async (req, res) => {
 	try {
-		await userService.isUsersIdInvalidObj(req.params.id);
+		await userService.isUsersIdInvalid(req.params.id);
 		await userService.validateUpdateBody(req.body);
 		const result = await userService.updateUser({
 			login: req.body.login,
@@ -33,6 +35,7 @@ router.put('/:id', async (req, res) => {
 		}, req.params.id);
 		res.send(result[1]);
 	} catch (err) {
+		console.log(err);
 		res.status(err.status).send(err.message);
 	}
 });
@@ -40,9 +43,10 @@ router.put('/:id', async (req, res) => {
 router.get('/:id', async (req, res) => {
 	try {
 		await userService.isUsersIdInvalid(req.params.id);
-		const user = await userService.getUserById(req.params.id);
+		const user = await usersData.getUserById(req.params.id);
 		res.send(user);
 	} catch (err) {
+		console.log(err);
 		res.status(err.status).send(err.message);
 	}
 });
@@ -53,7 +57,7 @@ router.get('/', async (req, res) => {
 			const autoSuggestUsers = await utils.getAutoSuggestUsers(req.query.loginContains);
 			res.send(autoSuggestUsers);
 		} else {
-			const users = await userService.getAllUsers();
+			const users = await userService.getAllUsers(true);
 			res.send(users);
 		}
 	} catch (exception) {
@@ -63,10 +67,11 @@ router.get('/', async (req, res) => {
 
 router.delete('/:id', async (req, res) => {
 	try {
-		await userService.isUsersIdInvalidObj(req.params.id);
+		await userService.isUsersIdInvalid(req.params.id);
 		const result = await userService.updateUser({ isdeleted: true }, req.params.id);
 		res.send(result[1]);
 	} catch (err) {
+		console.log(err);
 		res.status(err.status).send(err.message);
 	}
 })

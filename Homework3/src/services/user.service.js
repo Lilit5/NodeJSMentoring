@@ -4,22 +4,9 @@ const Joi = require('@hapi/joi');
 const schema = require('../schemas/users.post.schema');
 
 class UserService {
-	async getUserById(id) {
-		const users = await usersData.sendQuery(GET_FROM_TABLE(TABLE_NAME));
-		const userIndex = users.findIndex(user => user.id === parseInt(id));
-		return users[userIndex];
-	}
-
 	async isUsersIdInvalid(id) {
-		const users = await this.getAllUsers();
-		if (id > users.length || id < 1) {
-			throw ERROR(400, `User with id ${id} doesn't exist`);
-		}
-	}
-
-	async isUsersIdInvalidObj(id) {
-		const users = await this.getAllUsers(true);
-		if (id > users.length || id < 1) {
+		const idExists = await usersData.getUserById(id);
+		if (idExists == null) {
 			throw ERROR(400, `User with id ${id} doesn't exist`);
 		}
 	}
@@ -52,9 +39,9 @@ class UserService {
 
 	async validateBody(body) {
 		const validateionResp = Joi.validate(body, schema);
-		const users = await this.getAllUsers();
+		const userexists = await usersData.findByUsername(body.login);
 		const error = validateionResp.error ? validateionResp.error.details :
-			users.find(user => user.login === body.login) ?
+			userexists ?
 				{ message: `User with username "${body.login}" already exists` } : null;
 		if (error) {
 			throw ERROR(400, error);

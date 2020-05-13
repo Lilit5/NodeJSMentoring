@@ -42,6 +42,12 @@ class UsersData {
             return this.Users.update(toUpdate, { where: {id}, returning: true, raw: true });
 	}
 
+	async findByUsername(userName) { 
+		return this.Users.findOne({where: {login: userName}, returning: true, raw: true})
+	}
+	async getUserById(id) {
+		return this.Users.findOne({where: {id}, returning: true, raw: true});
+	}
 }
 
 export const usersData = new UsersData();
