@@ -31,9 +31,8 @@ router.put('/:id', async (req, res) => {
 		await groupService.isGroupIdInvalid(req.params.id);
 		await groupService.validateUpdateBody(req.body);
 		const result = await groupService.updateGroup({
-			login: req.body.login,
-			password: req.body.password,
-			age: req.body.age
+			name: req.body.name,
+			permissions: req.body.permissions
 		}, req.params.id);
 		res.send(result[1]);
 	} catch (err) {
@@ -65,10 +64,10 @@ router.get('/', async (req, res) => {
 router.delete('/:id', async (req, res) => {
 	try {
 		await groupService.isGroupIdInvalid(req.params.id);
-		const result = await groupService.deleteGroup();
-		res.send(result[1]);
+		await groupService.deleteGroup(req.params.id);
+		res.send({message: "success"});
 	} catch (err) {
-		console.log(err);
+		console.log("aaaaaaaaa ", err);
 		res.status(err.status).send(err.message);
 	}
 })

@@ -51,8 +51,8 @@ class GroupsData {
 		return this.Groups.findOne({where: {id}, returning: true, raw: true});
 	}
 
-	async deleteGroup(name) {
-		return this.Groups.destroy({where: {name}});
+	async deleteGroup(id) {
+		return this.Groups.destroy({where: {id}});
 	}
 }
 
