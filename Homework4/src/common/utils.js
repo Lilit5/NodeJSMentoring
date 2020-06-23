@@ -1,5 +1,6 @@
-import { GET_FROM_TABLE, CREATE_USERS_TABLE, TABLE_NAME, GROUPS_TABLE_NAME, CREATE_GROUPS_TABLE } from "./constants";
+import { GET_FROM_TABLE, CREATE_USERS_TABLE, TABLE_NAME, GROUPS_TABLE_NAME, CREATE_GROUPS_TABLE, RELATIONS_TABLE_NAME, CREATE_RELATIONS_TABLE, CREATE_RELATION} from "./constants";
 import { usersData } from "../data-accesses/user.data-access";
+import { groupModel } from "../models/group.model";
 
 class Utils {
 
@@ -12,6 +13,12 @@ class Utils {
 	async createGroupTable() {
 		await usersData.sendQuery(CREATE_GROUPS_TABLE(GROUPS_TABLE_NAME));
 		const table = await usersData.sendQuery(GET_FROM_TABLE(GROUPS_TABLE_NAME));
+		console.log("Created Table ", table);
+	}
+
+	async createRelationsTable() {
+		await usersData.sendQuery(CREATE_RELATIONS_TABLE(RELATIONS_TABLE_NAME ));
+		const table = await usersData.sendQuery(GET_FROM_TABLE(RELATIONS_TABLE_NAME));
 		console.log("Created Table ", table);
 	}
 
@@ -28,5 +35,10 @@ class Utils {
 		}
 		else return filteredUsers;
 	};
+
+	async addUsersToGroup(groupId, userId) {
+		const relations = await usersData.sendQuery(GET_FROM_TABLE(RELATIONS_TABLE_NAME));
+		await usersData.sendQuery(CREATE_RELATION(relations.length + 1, groupId, userId));
+	}
 }
 export const utils = new Utils();
