@@ -28,6 +28,8 @@ class UsersData {
 			timestamps: false,
 			freezeTableName: true
 		});
+		// this.transaction = await this.sequelize.transaction();
+		// this.sequelize.transaction().then(transact => this.thransaction = transact);
 		this.sequelize.authenticate().then(() => console.log("Authorized successful"));
 	}
 

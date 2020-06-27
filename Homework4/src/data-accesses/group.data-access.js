@@ -22,6 +22,7 @@ class GroupsData {
 			timestamps: false,
 			freezeTableName: true
 		});
+		// this.transaction = await this.sequelize.transaction();
 		this.sequelize.authenticate().then(() => console.log("Authorized successful"));
 	}
 
@@ -53,6 +54,15 @@ class GroupsData {
 
 	async deleteGroup(id) {
 		return this.Groups.destroy({where: {id}});
+	}
+
+	async wrapWithTransaction(queries) {
+		try {
+			
+		} catch(err) {
+			await this.transaction.rollback();
+			throw new Error("An error occured during query transaction, rolling back the transaction: ", err);
+		}
 	}
 }
 

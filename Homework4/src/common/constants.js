@@ -1,6 +1,7 @@
 export const TABLE_NAME = "users12";
 export const GROUPS_TABLE_NAME = "groups14";
-export const RELATIONS_TABLE_NAME = "usersGroupsRelations3";
+export const RELATIONS_TABLE_NAME = "usersgroupsrelations4";
+// export const RELATIONS_TABLE_NAME = "userGroup";
 
 export const CREATE_USERS_TABLE = tableName => `create table ${tableName}
 (id int primary key, login text, password text, age int, isDeleted bool);`;

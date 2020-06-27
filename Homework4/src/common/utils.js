@@ -1,5 +1,6 @@
 import { GET_FROM_TABLE, CREATE_USERS_TABLE, TABLE_NAME, GROUPS_TABLE_NAME, CREATE_GROUPS_TABLE, RELATIONS_TABLE_NAME, CREATE_RELATIONS_TABLE, CREATE_RELATION} from "./constants";
 import { usersData } from "../data-accesses/user.data-access";
+import { relationsData } from '../data-accesses/relations.data-access';
 import { groupModel } from "../models/group.model";
 
 class Utils {
@@ -17,9 +18,10 @@ class Utils {
 	}
 
 	async createRelationsTable() {
-		await usersData.sendQuery(CREATE_RELATIONS_TABLE(RELATIONS_TABLE_NAME ));
-		const table = await usersData.sendQuery(GET_FROM_TABLE(RELATIONS_TABLE_NAME));
-		console.log("Created Table ", table);
+		// await usersData.sendQuery(CREATE_RELATIONS_TABLE(RELATIONS_TABLE_NAME ));
+		await relationsData.createTable(RELATIONS_TABLE_NAME);
+		// const table = await relationsData.sendQuery(GET_FROM_TABLE(RELATIONS_TABLE_NAME));
+		// console.log("Created Table ", table);
 	}
 
 	async getAutoSuggestUsers(loginSubstring) {
@@ -36,9 +38,20 @@ class Utils {
 		else return filteredUsers;
 	};
 
-	async addUsersToGroup(groupId, userId) {
-		const relations = await usersData.sendQuery(GET_FROM_TABLE(RELATIONS_TABLE_NAME));
-		await usersData.sendQuery(CREATE_RELATION(relations.length + 1, groupId, userId));
+	async addUsersToGroup(userId, groupId) {
+		try {
+			const relations = await relationsData.findAllRecords();
+			const relation = {
+				id: relations.length + 1,
+				userId,
+				groupId
+			}
+			await relationsData.createRelation(relation);
+			await relationsData.transaction.commit();
+		} catch(err) {
+			await relationsData.transaction.rollback();
+			throw new Error("An error occured during query transaction, rolling back the transaction: ", err);
+		}
 	}
 }
 export const utils = new Utils();
