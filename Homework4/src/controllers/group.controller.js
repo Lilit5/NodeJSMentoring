@@ -1,7 +1,6 @@
 import { Router } from 'express';
 import groupService from '../services/group.service';
 import { groupsData } from "../data-accesses/group.data-access";
-import { utils } from '../common/utils';
 
 const router = Router();
 
@@ -31,7 +30,6 @@ router.put('/:id', async (req, res) => {
 		}, req.params.id);
 		res.send(result[1]);
 	} catch (err) {
-		console.log(err);
 		res.status(err.status).send(err.message);
 	}
 });
@@ -42,7 +40,6 @@ router.get('/:id', async (req, res) => {
 		const group = await groupsData.getGroupById(req.params.id);
 		res.send(group);
 	} catch (err) {
-		console.log(err);
 		res.status(err.status).send(err.message);
 	}
 });
@@ -62,7 +59,6 @@ router.delete('/:id', async (req, res) => {
 		await groupService.deleteGroup(req.params.id);
 		res.send({message: "success"});
 	} catch (err) {
-		console.log("aaaaaaaaa ", err);
 		res.status(err.status).send(err.message);
 	}
 })

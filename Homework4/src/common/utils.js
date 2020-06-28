@@ -57,7 +57,6 @@ class Utils {
 			await relationsData.createRelation(relation);
 			await transact.commit();
 		} catch(err) {
-			// console.log("+++++++++++++", err);
 			await transact.rollback();
 			throw new Error(`An error occured during query transaction, rolling back the transaction: ${err}`);
 		}

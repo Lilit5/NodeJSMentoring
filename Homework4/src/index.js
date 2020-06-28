@@ -26,9 +26,9 @@ app.get('/', (req, res) => {
 });
 
 // Testing addUsersToGroup function
-utils.addUsersToGroup(1,1)
-.then((res) => console.log("Added User to Group: ", res))
-.catch((err) => {throw new Error(`An error occured while adding user to group, message: ${err}`)});
+// utils.addUsersToGroup(1,1)
+// .then((res) => console.log("Added User to Group: ", res))
+// .catch((err) => {throw new Error(`An error occured while adding user to group, message: ${err}`)});
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Listening on port ${port} ...`))

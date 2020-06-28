@@ -51,31 +51,6 @@ class RelationsData {
 	async startTransaction() {
 		return await this.sequelize.transaction();
 	}
-	// async updateGroup(toUpdate, id) {
-    //     return this.Groups.update(toUpdate, { where: {id}, returning: true, raw: true });
-	// }
-
-	// async findByGroupname(name) { 
-	// 	console.log("eeeeeeeeeeeeeeeeeeee");
-	// 	return this.Groups.findOne({where: {name}, returning: true, raw: true});
-	// }
-
-	// async getGroupById(id) {
-	// 	return this.Groups.findOne({where: {id}, returning: true, raw: true});
-	// }
-
-	// async deleteGroup(id) {
-	// 	return this.Groups.destroy({where: {id}});
-	// }
-
-	// async wrapWithTransaction(queries) {
-	// 	try {
-			
-	// 	} catch(err) {
-	// 		await this.transaction.rollback();
-	// 		throw new Error("An error occured during query transaction, rolling back the transaction: ", err);
-	// 	}
-	// }
 }
 
 export const relationsData = new RelationsData();
