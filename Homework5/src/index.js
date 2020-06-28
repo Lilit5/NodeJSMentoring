@@ -19,6 +19,7 @@ import { GROUPS_TABLE_NAME, TABLE_NAME } from "./common/constants";
 
 const app = express();
 app.use(express.json());
+app.use(utils.validateToken);
 app.use('/users', UserController);
 app.use('/groups', GroupController);
 app.use('/auth', AuthController);
