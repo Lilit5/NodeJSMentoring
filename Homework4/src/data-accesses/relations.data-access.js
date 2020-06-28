@@ -22,7 +22,6 @@ class RelationsData {
 			timestamps: false,
 			freezeTableName: true
 		});
-		this.transaction = await this.sequelize.transaction();
 		this.queryInterface = this.sequelize.getQueryInterface();
 		this.sequelize.authenticate().then(() => console.log("Authorized successful"));
 
@@ -47,6 +46,10 @@ class RelationsData {
 
 	async findAllRecords() {
 			return this.Relations.findAll({ raw: true });
+	}
+
+	async startTransaction() {
+		return await this.sequelize.transaction();
 	}
 	// async updateGroup(toUpdate, id) {
     //     return this.Groups.update(toUpdate, { where: {id}, returning: true, raw: true });

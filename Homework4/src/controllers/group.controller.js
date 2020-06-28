@@ -6,22 +6,17 @@ import { utils } from '../common/utils';
 const router = Router();
 
 router.post('/', async (req, res, next) => {
-		console.log("aaaaaaaaaaaaa");
 	try {
 		await groupService.validateBody(req.body);
 		const groups = await groupService.getAllGroups();
-		console.log("all groups ?", groups);
 		const group = {
 			id: groups.length + 1,
 			name: req.body.name,
 			permissions: req.body.permissions
 		}
 		const response = await groupService.crateGroup(group);
-		console.log("create group response ? ", response);
 		res.send(response.dataValues);
-		console.log("bbbbbbbbbbbbb");
 } catch (err) {
-		console.log("eeerrrrrrrrrrrr ",err);
 		res.status(err.status).send(err.message);
 	}
 });
