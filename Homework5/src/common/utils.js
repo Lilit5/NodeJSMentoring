@@ -5,9 +5,11 @@ import { GET_FROM_TABLE,
 		 CREATE_GROUPS_TABLE, 
 		 RELATIONS_TABLE_NAME, 
 		 CREATE_DEFAULT_USER,
-		 CREATE_DEFAULT_GROUP } from "./constants";
+		 CREATE_DEFAULT_GROUP,
+		 JWT_KEY } from "./constants";
 import { usersData } from "../data-accesses/user.data-access";
 import { relationsData } from '../data-accesses/relations.data-access';
+const jwt = require('jsonwebtoken');
 
 class Utils {
 
@@ -57,9 +59,15 @@ class Utils {
 			await relationsData.createRelation(relation);
 			await transact.commit();
 		} catch(err) {
+			console.log("rrrrrrrrrrrrrrrrrrrrrrr ", err);
 			await transact.rollback();
 			throw new Error(`An error occured during query transaction, rolling back the transaction: ${err}`);
 		}
+	}
+
+	login(username, password) {
+		const payload = { "login": username, password};
+		return jwt.sign(payload, JWT_KEY, {expiresIn: 300});
 	}
 }
 export const utils = new Utils();

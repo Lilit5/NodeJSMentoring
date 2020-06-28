@@ -47,18 +47,14 @@ class GroupService {
 	}
 
 	async validateBody(body) {
-		console.log("cccccccccccccccccc");
 		const validateionResp = Joi.validate(body, schema);
-		console.log("dddddddddddddddddd");
 		const groupExists = await groupsData.findByGroupname(body.name);
-		console.log("groupExists ?", groupExists);
 		const error = validateionResp.error ? validateionResp.error.details :
 			groupExists ?
 				{ message: `Group with name "${body.login}" already exists` } : null;
 		if (error) {
 			throw ERROR(400, error);
 		}
-		console.log("fffffffffffffffffffff");
 	}
 
 	async validateUpdateBody(body) {

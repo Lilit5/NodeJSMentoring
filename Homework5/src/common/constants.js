@@ -2,6 +2,8 @@ export const TABLE_NAME = "users";
 export const GROUPS_TABLE_NAME = "groups";
 export const RELATIONS_TABLE_NAME = "usergroup";
 
+export const JWT_KEY = "sfdsfxz5@3dfds!ds_secret";
+
 export const CREATE_USERS_TABLE = tableName => `create table ${tableName}
 (id int primary key, login text, password text, age int, isDeleted bool);`;
 
